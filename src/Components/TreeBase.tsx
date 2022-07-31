@@ -1,6 +1,6 @@
 import { DataNode } from 'antd/lib/tree';
 import DirectoryTree, { DirectoryTreeProps } from 'antd/lib/tree/DirectoryTree';
-import React from 'react'
+import { observer } from 'mobx-react';
 
 const treeData: DataNode[] = [
   {
@@ -21,7 +21,7 @@ const treeData: DataNode[] = [
   },
 ];
 
-export default function TreeBase() {
+function TreeBaseItems() {
   const onSelect: DirectoryTreeProps['onSelect'] = (keys, info) => {
     console.log('Trigger Select', keys, info);
   };
@@ -39,4 +39,14 @@ export default function TreeBase() {
       treeData={treeData}
     />
   )
+}
+
+const TreeBaseItemsObserver = observer(TreeBaseItems);
+
+export default function TreeBase() {
+    return (
+        <>
+            <TreeBaseItemsObserver />
+        </>
+    )
 }
