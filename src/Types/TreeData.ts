@@ -3,5 +3,6 @@ export type TreeDataType = {
     name: string;
     description?: string;
     parentId?: number;
-    children: TreeDataType[];
+    hasChildren: boolean;
+    children?: TreeDataType[];
 }
