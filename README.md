@@ -9,7 +9,8 @@ The goal :checkered_flag: of this is to reach a separation between data and styl
 
 ## Functionality contains:
 - :x: Lazy data loading simulation (real world usecase is to get only needed data from backend & database)
-- :x: Add root/child node
+- :heavy_check_mark: Add root node 
+- :x: Add child node
 - :x: Delete root/child node
 - :x: Rename root/child node
 - :x: TreeData manipulation in whole project (mobx store)
