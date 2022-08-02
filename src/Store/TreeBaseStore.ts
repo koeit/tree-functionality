@@ -2,6 +2,7 @@
 import { DataNode } from "antd/lib/tree";
 import { makeAutoObservable } from "mobx";
 import { TreeDataType } from "../Types/TreeData";
+import MapTreeDataToStyledTreeData from "../utils/MapTreeDataToStyledTreeData";
 
 function removeNodeByKey(
   currentTreeData: DataNode[],
@@ -77,20 +78,27 @@ function updateTreeData(
   });
 }
 
-const appendRootNode = (rootNodeData: TreeDataType, currentTreeData: TreeDataType[]) : void => {
-  currentTreeData.push(rootNodeData);
+const appendRootNodes = (rootNodesData: TreeDataType[], currentTreeData: TreeDataType[]) : void => {
+  rootNodesData.forEach(rootNode => {
+    currentTreeData.push(rootNode);
+  })
 }
 
 class TreeBaseStore {
   treeData: TreeDataType[] = [];
+  styledTreeData: DataNode[] = [];
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  appendRootNode(rootNodeData: TreeDataType) {
+  appendRootNode(rootNodeData: TreeDataType[]) {
     // append rootNodeData to this.treeData because of call by reference
-    appendRootNode(rootNodeData, this.treeData);
+    appendRootNodes(rootNodeData, this.treeData);
+  }
+
+  mapTreeDataToStyledTreeData(){
+    this.styledTreeData = MapTreeDataToStyledTreeData([...this.treeData]);
   }
 }
 const treeBaseStore = new TreeBaseStore();
