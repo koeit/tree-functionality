@@ -77,11 +77,20 @@ function updateTreeData(
   });
 }
 
+const appendRootNode = (rootNodeData: TreeDataType, currentTreeData: TreeDataType[]) : void => {
+  currentTreeData.push(rootNodeData);
+}
+
 class TreeBaseStore {
   treeData: TreeDataType[] = [];
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  appendRootNode(rootNodeData: TreeDataType) {
+    // append rootNodeData to this.treeData because of call by reference
+    appendRootNode(rootNodeData, this.treeData);
   }
 }
 const treeBaseStore = new TreeBaseStore();
