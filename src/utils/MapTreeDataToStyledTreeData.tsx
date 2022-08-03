@@ -7,11 +7,11 @@ const goThroughEveryNodeInTreeData = (currentTreeData: TreeDataType[]) : DataNod
     currentTreeData.forEach(node => {
         if (node.hasChildren) {
             styledTreeData.push({
-                title: <span style={{color: "red"}}>{node.name}</span>, key: node.id, selectable: false, children: goThroughEveryNodeInTreeData(node.children!)
+                title: <span style={{color: "red"}}>{node.name}</span>, key: node.id, selectable: true, children: goThroughEveryNodeInTreeData(node.children!)
             })
         } else {
             styledTreeData.push({
-                title: <span style={{color: "blue"}}>{node.name}</span>, key: node.id, selectable: false, children: []
+                title: <span style={{color: "blue"}}>{node.name}</span>, key: node.id, selectable: true, children: []
             })
         }
     });
