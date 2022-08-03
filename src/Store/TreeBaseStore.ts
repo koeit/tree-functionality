@@ -92,6 +92,19 @@ class TreeBaseStore {
     makeAutoObservable(this);
   }
 
+  createAndAppendRootNode(nodeId: number ,nodeName: string, nodeDescription? : string){
+    const newRootNode : TreeDataType = {
+      id: nodeId,
+      name: nodeName,
+      description: nodeDescription,
+      parentId: undefined,
+      hasChildren: false,
+      children: undefined
+    }
+
+    appendRootNodes([newRootNode], this.treeData);
+  }
+
   appendRootNode(rootNodeData: TreeDataType[]) {
     // append rootNodeData to this.treeData because of call by reference
     appendRootNodes(rootNodeData, this.treeData);
