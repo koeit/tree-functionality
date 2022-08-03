@@ -120,7 +120,8 @@ class TreeBaseStore {
     }
   }
 
-  createAndAppendRootNode(nodeId: number, nodeName: string, nodeDescription? : string){
+  createAndAppendRootNode(nodeId: number ,nodeName: string, nodeDescription? : string){
+
     const newRootNode : TreeDataType = {
       id: nodeId,
       name: nodeName,
