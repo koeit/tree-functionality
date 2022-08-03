@@ -56,26 +56,33 @@ function renameNodeByKey(
     });
 }
 
-function updateTreeData(
-  currentTreeData: DataNode[],
-  key: React.Key,
-  children: DataNode[]
-): DataNode[] {
-  return currentTreeData.map((node) => {
-    if (node.key === key) {
-      return {
-        ...node,
-        children,
-      };
+/// TODO: need refactoring
+function appendChildNodes(children: TreeDataType[], parentNodeId: React.Key, currentTreeData: TreeDataType[]): void{
+  currentTreeData.forEach(node => {
+    if(node.id === parentNodeId){      
+      if(node.children && node.children.length === 1 && node.children[0].name === "loading..."){
+        // overwrite loading... (from lazy loading)
+        node.children = children;
+      } else {
+        if(node.children){
+          // append to existing array
+          children.forEach(child => {
+            node.children!.push(child)
+          })
+        } else {
+          // initialize a new array
+          node.hasChildren = true;
+          node.children = [...children];
+        }   
+      }
+    } else {
+      if(node.hasChildren){
+        if(node.children![0].name !== "loading..."){
+          appendChildNodes(children, parentNodeId, node.children!)
+        }
+      }
     }
-    if (node.children) {
-      return {
-        ...node,
-        children: updateTreeData(node.children, key, children),
-      };
-    }
-    return node;
-  });
+  })
 }
 
 const appendRootNodes = (rootNodesData: TreeDataType[], currentTreeData: TreeDataType[]) : void => {
@@ -88,11 +95,32 @@ class TreeBaseStore {
   treeData: TreeDataType[] = [];
   styledTreeData: DataNode[] = [];
 
+  currentSelectedTreeNodeKey : number = 0;
+
   constructor() {
     makeAutoObservable(this);
   }
 
-  createAndAppendRootNode(nodeId: number ,nodeName: string, nodeDescription? : string){
+  setCurrentSelectedTreeNodeKey(key: number){
+    this.currentSelectedTreeNodeKey = key;
+  }
+
+  createAndAppendChildNode(nodeId: number, nodeName: string, nodeDescription? : string) {
+    if (this.currentSelectedTreeNodeKey !== 0){
+      const newChildNode : TreeDataType = {
+        id: nodeId,
+        name: nodeName,
+        description: nodeDescription,
+        parentId: this.currentSelectedTreeNodeKey,
+        hasChildren: false,
+        children: undefined
+      }
+  
+      this.appendChildNodes([newChildNode], this.currentSelectedTreeNodeKey);
+    }
+  }
+
+  createAndAppendRootNode(nodeId: number, nodeName: string, nodeDescription? : string){
     const newRootNode : TreeDataType = {
       id: nodeId,
       name: nodeName,
@@ -108,6 +136,10 @@ class TreeBaseStore {
   appendRootNode(rootNodeData: TreeDataType[]) {
     // append rootNodeData to this.treeData because of call by reference
     appendRootNodes(rootNodeData, this.treeData);
+  }
+
+  appendChildNodes(childNodesData: TreeDataType[], parentNodeKey: number){
+    appendChildNodes(childNodesData, parentNodeKey, this.treeData);
   }
 
   mapTreeDataToStyledTreeData(){

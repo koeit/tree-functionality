@@ -34,25 +34,6 @@ export default function CreateNewTreeNodes() {
         >
           Add
         </Button>
-        <Form.Item name="child_node" noStyle>
-            <Input
-              prefix="Child Node:"
-              style={{ width: "calc(100% - 200px)" }}
-              size="middle"
-              placeholder="node name"
-            />
-        </Form.Item>
-        <Button
-          htmlType="button"
-          type="default"
-          size="middle"
-          style={{ width: "200px" }}
-          onClick={() => {
-            alert(form.getFieldValue("child_node"))
-          }}
-        >
-          Add
-        </Button>
       </Form>
     </>
   );

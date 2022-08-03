@@ -7,8 +7,8 @@ function App() {
   return (
     <>
       <CreateNewTreeNodes />
-      <TreeBase />
       <ShowSelectedTreeNodeInfo />
+      <TreeBase />
     </>
   );
 }

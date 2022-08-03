@@ -73,7 +73,8 @@ function TreeBaseItems() {
   
 
   const onSelect: DirectoryTreeProps['onSelect'] = (keys, info) => {
-    console.log('Trigger Select', keys, info);
+    //console.log('Trigger Select', keys, info);
+    treeBaseStore.setCurrentSelectedTreeNodeKey(keys[0] as number)
   };
 
   const onExpand: DirectoryTreeProps['onExpand'] = (keys, info) => {
