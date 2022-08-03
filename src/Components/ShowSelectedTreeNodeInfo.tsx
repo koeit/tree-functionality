@@ -1,7 +1,17 @@
-import React from 'react'
+import { observer } from 'mobx-react';
 
-export default function ShowSelectedTreeNodeInfo() {
+function ShowSelectedTreeNodeInfoItems() {
   return (
     <div>ShowSelectedTreeNodeInfo</div>
   )
+}
+
+const ShowSelectedTreeNodeInfoItemsObserver = observer(ShowSelectedTreeNodeInfoItems);
+
+export default function ShowSelectedTreeNodeInfo() {
+    return (
+        <>
+            <ShowSelectedTreeNodeInfoItemsObserver />
+        </>
+    )
 }
