@@ -82,11 +82,21 @@ function TreeBaseItems() {
   };
   
   return (
-    <DirectoryTree      
-      onSelect={onSelect}
-      onExpand={onExpand}
-      treeData={toJS(treeBaseStore.styledTreeData)}
-    />
+    <div 
+      onMouseOver={() => {
+        treeBaseStore.setIsMouseOver(true);
+      }}
+      onMouseLeave={() => {
+        treeBaseStore.setIsMouseOver(false);
+      }}
+    >
+      <DirectoryTree      
+        onSelect={onSelect}
+        onExpand={onExpand}
+        selectedKeys={[treeBaseStore.currentSelectedTreeNodeKey]}
+        treeData={toJS(treeBaseStore.styledTreeData)}
+      />
+    </div>
   )
 }
 

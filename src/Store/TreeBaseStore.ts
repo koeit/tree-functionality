@@ -97,8 +97,15 @@ class TreeBaseStore {
 
   currentSelectedTreeNodeKey : number = 0;
 
+  // is mouse over tree
+  isMouseOver : boolean = false;
+
   constructor() {
     makeAutoObservable(this);
+  }
+
+  setIsMouseOver(status: boolean){
+    this.isMouseOver = status;
   }
 
   setCurrentSelectedTreeNodeKey(key: number){
