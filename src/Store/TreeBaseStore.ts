@@ -31,29 +31,36 @@ function removeNodeByKey(
     });
 }
 
-function renameNodeByKey(
-  currentTreeData: DataNode[],
-  key: React.Key,
-  newNodeName: JSX.Element
-): DataNode[] {
-  return currentTreeData
-    .filter((node) => {
-      if (node.key === key) {
-        node.title = newNodeName;
+function renameNodeByKey(key: React.Key, newName: string, currentTreeData: TreeDataType[]): void{
+  for(let node of currentTreeData){
+    if(node.id === key){
+      node.name = newName;
+      break;
+    } else {
+      // if this node has any children (but not the lazy loading title)
+      if(node.hasChildren && node.children && node.children[0].name !== treeBaseStore.lazyLoadingNodeTitle){
+        renameNodeByKey(key, newName, node.children);
       }
+    }
+  }
+}
 
-      return true;
-    })
-    .map((node) => {
-      if (node.children) {
-        return {
-          ...node,
-          children: renameNodeByKey(node.children, key, newNodeName),
-        };
+function getNodeTitleByKey(key: React.Key, currentTreeData: TreeDataType[]): string | undefined {
+  for(let node of currentTreeData){
+    if(node.id === key){
+      return node.name
+    } else {
+      // if this node has any children (but not the lazy loading title)
+      if(node.hasChildren && node.children && node.children[0].name !== treeBaseStore.lazyLoadingNodeTitle){
+        const returnValue = getNodeTitleByKey(key, node.children);
+        if(returnValue !== undefined){
+          return returnValue;
+        }
       }
+    }
+  }
 
-      return node;
-    });
+  return undefined;
 }
 
 /// TODO: need refactoring
@@ -100,8 +107,20 @@ class TreeBaseStore {
   // is mouse over tree
   isMouseOver : boolean = false;
 
+  // child node title if there is a data but not loaded (lazy loading title)
+  lazyLoadingNodeTitle: string = "loading...";
+
   constructor() {
     makeAutoObservable(this);
+  }
+
+  getNodeTitleByKey(key: number) : string {
+    const returnValue = getNodeTitleByKey(key, this.treeData);
+    return returnValue !== undefined ? returnValue : "loading... (Is not editable! Is part of lazy loading!)";
+  }
+
+  renameNodeByKey(key: number, newName: string){
+    renameNodeByKey(key, newName, this.treeData)
   }
 
   setIsMouseOver(status: boolean){

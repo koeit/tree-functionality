@@ -1,9 +1,19 @@
 import { Button, Form, Input } from 'antd';
 import { observer } from 'mobx-react';
+import { useEffect } from 'react';
 import treeBaseStore from '../Store/TreeBaseStore';
 
 function ShowSelectedTreeNodeInfoItems() {
   const [form] = Form.useForm<{}>();
+
+  // fill textbox with existing node title
+  useEffect(() => {
+    const selectedTreeNodeKey: number = treeBaseStore.currentSelectedTreeNodeKey;
+    if (selectedTreeNodeKey !== 0){
+      form.setFieldValue("child_node_rename", treeBaseStore.getNodeTitleByKey(selectedTreeNodeKey))
+    }
+  }, [treeBaseStore.currentSelectedTreeNodeKey])
+  
 
   return (
     <>
@@ -33,6 +43,28 @@ function ShowSelectedTreeNodeInfoItems() {
             }}
           >
             Add
+          </Button>
+          <Form.Item name="child_node_rename" noStyle>
+              <Input
+                prefix="Child Node:"
+                style={{ width: "calc(100% - 200px)" }}
+                size="middle"
+              />
+          </Form.Item>
+          <Button
+            htmlType="button"
+            type="default"
+            size="middle"
+            style={{ width: "200px" }}
+            onClick={() => {
+              treeBaseStore.renameNodeByKey(
+                treeBaseStore.currentSelectedTreeNodeKey, 
+                form.getFieldValue("child_node_rename"));
+            
+              treeBaseStore.mapTreeDataToStyledTreeData();
+            }}
+          >
+            Rename
           </Button>
         </Form>
       : null}
