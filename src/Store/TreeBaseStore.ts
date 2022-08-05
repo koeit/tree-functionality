@@ -4,31 +4,16 @@ import { makeAutoObservable } from "mobx";
 import { TreeDataType } from "../Types/TreeData";
 import MapTreeDataToStyledTreeData from "../utils/MapTreeDataToStyledTreeData";
 
-function removeNodeByKey(
-  currentTreeData: DataNode[],
-  key: React.Key
-): DataNode[] {
-  // skip map element
-  // https://www.thiscodeworks.com/javascript-how-to-skip-over-an-element-in-map-stack-overflow-javascript/6205d7e4a4f5770015a884f5
-
-  return currentTreeData
-    .filter((node) => {
-      if (node.key === key) {
-        return false; // skip
-      }
-
-      return true;
-    })
-    .map((node) => {
-      if (node.children) {
-        return {
-          ...node,
-          children: removeNodeByKey(node.children, key),
-        };
-      }
-
-      return node;
-    });
+function removeNodeByKey(key: React.Key, currentTreeData: TreeDataType[]): void {
+  for (let node of currentTreeData){
+    if (node.id === key){
+      currentTreeData.splice(currentTreeData.indexOf(node), 1);
+      break;
+    }
+    if (node.hasChildren && node.children && node.children[0].name !== treeBaseStore.lazyLoadingNodeTitle){
+      removeNodeByKey(key, node.children);
+    }
+  }
 }
 
 function renameNodeByKey(key: React.Key, newName: string, currentTreeData: TreeDataType[]): void{
@@ -113,6 +98,10 @@ class TreeBaseStore {
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  removeNodeByKey(key: number){
+    removeNodeByKey(key, this.treeData);
   }
 
   getNodeTitleByKey(key: number) : string {

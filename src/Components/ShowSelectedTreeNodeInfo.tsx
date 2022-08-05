@@ -66,6 +66,20 @@ function ShowSelectedTreeNodeInfoItems() {
           >
             Rename
           </Button>
+          <Button
+            htmlType="button"
+            type="default"
+            size="middle"
+            style={{ width: "200px" }}
+            onClick={() => {
+              treeBaseStore.removeNodeByKey(
+                treeBaseStore.currentSelectedTreeNodeKey);
+            
+              treeBaseStore.mapTreeDataToStyledTreeData();
+            }}
+          >
+            Delete Selected Node
+          </Button>
         </Form>
       : null}
     </>
