@@ -3,6 +3,12 @@ A ReactJS project, written in TypeScript which implements a (UI Framework) Tree 
 
 The goal :checkered_flag: of this is to reach a separation between data and styled data for easy efficient data manipulation.
 
+---
+| done | in work |
+|------|---------|
+| :heavy_check_mark: | :x: |
+---
+
 - Used UI Frameworks:
   - :heavy_check_mark: [ant.design](https://ant.design/)
   - :x: [mui.com](https://mui.com)
