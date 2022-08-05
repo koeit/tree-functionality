@@ -107,6 +107,7 @@ class TreeBaseStore {
   // is mouse over tree
   isMouseOver : boolean = false;
 
+
   // child node title if there is a data but not loaded (lazy loading title)
   lazyLoadingNodeTitle: string = "loading...";
 
