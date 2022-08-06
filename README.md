@@ -19,6 +19,5 @@ The goal :checkered_flag: of this is to reach a separation between data and styl
 - :heavy_check_mark: Delete root/child node
 - :heavy_check_mark: Rename root/child node
 - :heavy_check_mark: TreeData manipulation in whole project (mobx store)
-- :heavy_check_mark: alphabetical sorting of root nodes
-- :x: alphabetical sorting of child nodes
+- :heavy_check_mark: alphabetical sorting of root/child nodes
 - :heavy_check_mark: separation between data and styled data

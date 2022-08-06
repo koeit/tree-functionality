@@ -39,7 +39,7 @@ function TreeBaseItems() {
               id: 4,
               name: "Drivers",
               description: "All about the drivers",
-              parentId: undefined,
+              parentId: 3,
               hasChildren: true,
               children: [EmptyChildNodeData(4)]
             },
@@ -47,7 +47,7 @@ function TreeBaseItems() {
               id: 5,
               name: "Cars",
               description: "All about cars",
-              parentId: undefined,
+              parentId: 3,
               hasChildren: true,
               children: [EmptyChildNodeData(5)]
             },
@@ -55,7 +55,7 @@ function TreeBaseItems() {
               id: 6,
               name: "Current Location",
               description: undefined,
-              parentId: undefined,
+              parentId: 3,
               hasChildren: false,
               children: undefined
             },
@@ -64,7 +64,13 @@ function TreeBaseItems() {
       ];
     
       treeBaseStore.appendRootNodes(demoRootNode);
+
+      // sort root nodes
       treeBaseStore.sortTreeNodes();
+      
+      // sort child nodes (demo data: some children are allready included)
+      treeBaseStore.sortTreeNodes(3);
+
       treeBaseStore.mapTreeDataToStyledTreeData();
       
       loadedOnce = true;
