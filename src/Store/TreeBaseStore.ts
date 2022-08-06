@@ -146,7 +146,7 @@ class TreeBaseStore {
   getChildNodesByParentNodeKey(parentNodeKey: number) : TreeDataType[] | undefined {
     return getChildNodesByParentNodeKey(parentNodeKey, this.treeData);
   }
-
+  
   isCurrentSelectedTreeNodeARootNode(): boolean {
     for (const node of this.treeData){
       if(node.id === this.currentSelectedTreeNodeKey){
