@@ -83,6 +83,10 @@ const appendRootNodes = (rootNodesData: TreeDataType[], currentTreeData: TreeDat
   })
 }
 
+function sortTreeNodes (currentTreeData: TreeDataType[]) : void {
+  currentTreeData.sort((a, b) => a.name.localeCompare(b.name))
+}
+
 class TreeBaseStore {
   treeData: TreeDataType[] = [];
   styledTreeData: DataNode[] = [];
@@ -121,6 +125,20 @@ class TreeBaseStore {
     this.currentSelectedTreeNodeKey = key;
   }
 
+  /**
+   * @param parentId only with a parentId a group of child nodes can be sorted
+   * if there is no parentId, only root nodes will be sorted
+   */
+  sortTreeNodes(parentId?: number){
+    if(parentId){
+      // sort group of child nodes
+
+    } else {
+      // sort root nodes
+      sortTreeNodes(this.treeData);
+    }
+  }
+
   createAndAppendChildNode(nodeId: number, nodeName: string, nodeDescription? : string) {
     if (this.currentSelectedTreeNodeKey !== 0){
       const newChildNode : TreeDataType = {
@@ -150,7 +168,7 @@ class TreeBaseStore {
     appendRootNodes([newRootNode], this.treeData);
   }
 
-  appendRootNode(rootNodeData: TreeDataType[]) {
+  appendRootNodes(rootNodeData: TreeDataType[]) {
     // append rootNodeData to this.treeData because of call by reference
     appendRootNodes(rootNodeData, this.treeData);
   }

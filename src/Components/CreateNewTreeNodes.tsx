@@ -28,6 +28,9 @@ export default function CreateNewTreeNodes() {
             const backendReturnId : number = Number(new Date());
             treeBaseStore.createAndAppendRootNode(backendReturnId, form.getFieldValue("root_node"))
 
+            // sort all root nodes
+            treeBaseStore.sortTreeNodes();
+            
             // map everything
             treeBaseStore.mapTreeDataToStyledTreeData();
           }}

@@ -63,7 +63,8 @@ function TreeBaseItems() {
         },
       ];
     
-      treeBaseStore.appendRootNode(demoRootNode);
+      treeBaseStore.appendRootNodes(demoRootNode);
+      treeBaseStore.sortTreeNodes();
       treeBaseStore.mapTreeDataToStyledTreeData();
       
       loadedOnce = true;
