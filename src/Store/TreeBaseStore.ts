@@ -30,6 +30,7 @@ function renameNodeByKey(key: React.Key, newName: string, currentTreeData: TreeD
   }
 }
 
+/// TODO: can be replaced by getNodeInfoByKey
 function getNodeTitleByKey(key: React.Key, currentTreeData: TreeDataType[]): string | undefined {
   for(let node of currentTreeData){
     if(node.id === key){
@@ -41,6 +42,45 @@ function getNodeTitleByKey(key: React.Key, currentTreeData: TreeDataType[]): str
         if(returnValue !== undefined){
           return returnValue;
         }
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function getNodeInfoByKey(key: React.Key, currentTreeData: TreeDataType[]): TreeDataType | undefined {
+  for(let node of currentTreeData){
+    if(node.id === key){
+      return node
+    } else {
+      // if this node has any children (but not the lazy loading title)
+      if(node.hasChildren && node.children && node.children[0].name !== treeBaseStore.lazyLoadingNodeTitle){
+        const returnValue = getNodeInfoByKey(key, node.children);
+        if(returnValue !== undefined){
+          return returnValue;
+        }
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function getChildNodesByParentNodeKey(parentNodeKey: React.Key, currentTreeData: TreeDataType[]): TreeDataType[] | undefined {
+  for(const node of currentTreeData){
+    if(node.id === parentNodeKey){
+      if(node.hasChildren && node.children && node.children[0].name !== treeBaseStore.lazyLoadingNodeTitle){
+        return node.children;
+      } else {
+        return undefined;
+      }
+    }
+    // if this node has any children (but not the lazy loading title)
+    if(node.hasChildren && node.children && node.children[0].name !== treeBaseStore.lazyLoadingNodeTitle){
+      const returnValue = getChildNodesByParentNodeKey(parentNodeKey, node.children);
+      if(returnValue !== undefined){
+        return returnValue;
       }
     }
   }
@@ -103,13 +143,17 @@ class TreeBaseStore {
     makeAutoObservable(this);
   }
 
+  getChildNodesByParentNodeKey(parentNodeKey: number) : TreeDataType[] | undefined {
+    return getChildNodesByParentNodeKey(parentNodeKey, this.treeData);
+  }
+
   isCurrentSelectedTreeNodeARootNode(): boolean {
     for (const node of this.treeData){
       if(node.id === this.currentSelectedTreeNodeKey){
         return true
       }
     }
-    
+
     return false
   }
 
@@ -120,6 +164,11 @@ class TreeBaseStore {
   getNodeTitleByKey(key: number) : string {
     const returnValue = getNodeTitleByKey(key, this.treeData);
     return returnValue !== undefined ? returnValue : "loading... (Is not editable! Is part of lazy loading!)";
+  }
+
+  getNodeInfoByKey(key: number) : TreeDataType | undefined {
+    const returnValue = getNodeInfoByKey(key, this.treeData);
+    return returnValue !== undefined ? returnValue : undefined;
   }
 
   renameNodeByKey(key: number, newName: string){
@@ -141,7 +190,11 @@ class TreeBaseStore {
   sortTreeNodes(parentId?: number){
     if(parentId){
       // sort group of child nodes
-
+      const childNodes: TreeDataType[] | undefined = this.getChildNodesByParentNodeKey(parentId);
+      
+      if (childNodes !== undefined){
+        sortTreeNodes(childNodes)
+      }
     } else {
       // sort root nodes
       sortTreeNodes(this.treeData);

@@ -2,6 +2,7 @@ import { Button, Form, Input } from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
 import treeBaseStore from '../Store/TreeBaseStore';
+import { TreeDataType } from '../Types/TreeData';
 
 function ShowSelectedTreeNodeInfoItems() {
   const [form] = Form.useForm<{}>();
@@ -10,7 +11,7 @@ function ShowSelectedTreeNodeInfoItems() {
   useEffect(() => {
     const selectedTreeNodeKey: number = treeBaseStore.currentSelectedTreeNodeKey;
     if (selectedTreeNodeKey !== 0){
-      form.setFieldValue("child_node_rename", treeBaseStore.getNodeTitleByKey(selectedTreeNodeKey))
+      form.setFieldValue("node_rename", treeBaseStore.getNodeTitleByKey(selectedTreeNodeKey))
     }
   }, [treeBaseStore.currentSelectedTreeNodeKey])
   
@@ -38,15 +39,16 @@ function ShowSelectedTreeNodeInfoItems() {
               const backendReturnId : number = Number(new Date());
 
               treeBaseStore.createAndAppendChildNode(backendReturnId, form.getFieldValue("child_node"), undefined);
-            
+              treeBaseStore.sortTreeNodes(treeBaseStore.currentSelectedTreeNodeKey);
+
               treeBaseStore.mapTreeDataToStyledTreeData();
             }}
           >
             Add
           </Button>
-          <Form.Item name="child_node_rename" noStyle>
+          <Form.Item name="node_rename" noStyle>
               <Input
-                prefix="Child Node:"
+                prefix="Rename this node:"
                 style={{ width: "calc(100% - 200px)" }}
                 size="middle"
               />
@@ -57,16 +59,22 @@ function ShowSelectedTreeNodeInfoItems() {
             size="middle"
             style={{ width: "200px" }}
             onClick={() => {
+              const currentSelectedTreeNodeKey: number = treeBaseStore.currentSelectedTreeNodeKey;
+
               treeBaseStore.renameNodeByKey(
-                treeBaseStore.currentSelectedTreeNodeKey, 
-                form.getFieldValue("child_node_rename"));
+                currentSelectedTreeNodeKey, 
+                form.getFieldValue("node_rename"));
               
                 if (treeBaseStore.isCurrentSelectedTreeNodeARootNode()){
                   // sort root nodes
                   treeBaseStore.sortTreeNodes();
                 } else { 
                   // sort child nodes
+                  const childNodeInfo: TreeDataType | undefined = treeBaseStore.getNodeInfoByKey(currentSelectedTreeNodeKey);
                   
+                  if (childNodeInfo !== undefined){
+                    treeBaseStore.sortTreeNodes(childNodeInfo.parentId);
+                  }
                 }
             
               treeBaseStore.mapTreeDataToStyledTreeData();
