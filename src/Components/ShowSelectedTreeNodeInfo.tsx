@@ -60,6 +60,14 @@ function ShowSelectedTreeNodeInfoItems() {
               treeBaseStore.renameNodeByKey(
                 treeBaseStore.currentSelectedTreeNodeKey, 
                 form.getFieldValue("child_node_rename"));
+              
+                if (treeBaseStore.isCurrentSelectedTreeNodeARootNode()){
+                  // sort root nodes
+                  treeBaseStore.sortTreeNodes();
+                } else { 
+                  // sort child nodes
+                  
+                }
             
               treeBaseStore.mapTreeDataToStyledTreeData();
             }}
