@@ -14,7 +14,7 @@ The goal :checkered_flag: of this is to reach a separation between data and styl
   - :x: [mui.com](https://mui.com)
 
 ## Functionality contains:
-- :x: Lazy data loading simulation (real world usecase is to get only needed data from backend & database)
+- :heavy_check_mark: Lazy data loading simulation (real world usecase is to get only needed data from backend & database)
 - :heavy_check_mark: Add root/child node 
 - :heavy_check_mark: Delete root/child node
 - :heavy_check_mark: Rename root/child node

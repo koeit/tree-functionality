@@ -34,33 +34,8 @@ function TreeBaseItems() {
           description: "All about F1 Racing",
           parentId: undefined,
           hasChildren: true,
-          children: [
-            {
-              id: 4,
-              name: "Drivers",
-              description: "All about the drivers",
-              parentId: 3,
-              hasChildren: true,
-              children: [EmptyChildNodeData(4)]
-            },
-            {
-              id: 5,
-              name: "Cars",
-              description: "All about cars",
-              parentId: 3,
-              hasChildren: true,
-              children: [EmptyChildNodeData(5)]
-            },
-            {
-              id: 6,
-              name: "Current Location",
-              description: undefined,
-              parentId: 3,
-              hasChildren: false,
-              children: undefined
-            },
-          ]
-        },
+          children: [EmptyChildNodeData(3)]
+        }
       ];
     
       treeBaseStore.appendRootNodes(demoRootNode);
@@ -80,12 +55,27 @@ function TreeBaseItems() {
   
 
   const onSelect: DirectoryTreeProps['onSelect'] = (keys, info) => {
-    //console.log('Trigger Select', keys, info);
+    // console.log('Trigger Select', keys, info);
     treeBaseStore.setCurrentSelectedTreeNodeKey(keys[0] as number)
   };
 
   const onExpand: DirectoryTreeProps['onExpand'] = (keys, info) => {
-    console.log('Trigger Expand', keys, info);
+    // console.log('Trigger Expand', keys, info);
+    const key = keys[keys.length - 1] as number;
+
+    if (treeBaseStore.getNodeInfoByKey(key)?.hasChildren){
+      const allChildrenOfThisParent =  treeBaseStore.getChildNodesByParentNodeKey(key);
+      
+      if (allChildrenOfThisParent === undefined){
+        // EmptyChildNodeData with treeBaseStore.lazyLoadingNodeTitle is already loaded.
+        // this Data need to be overwritten by loaded data from backend.
+        // here this Data will be overwritten by demo data
+        const tmpId = Number(new Date());
+        treeBaseStore.appendChildNodes([{id: tmpId, name: "demo data", hasChildren: true, children: [EmptyChildNodeData(tmpId)], description: undefined, parentId: (key)}], (key))
+        
+        treeBaseStore.mapTreeDataToStyledTreeData();
+      }
+    }
   };
   
   return (
